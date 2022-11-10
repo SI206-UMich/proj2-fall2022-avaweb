@@ -35,6 +35,15 @@ def get_listings_from_search_results(html_file):
         count += 1
     print(titles)
 
+    id_list = []
+    for i in div_tags:
+        ids = i.get('id', None)
+        new = ids.split('_')
+        id_list.append(new[1])
+    print(id_list)
+
+    price_tags = soup.find_all('span', class_ = 't1jojoys')
+
 
 def get_listing_information(listing_id):
     """
