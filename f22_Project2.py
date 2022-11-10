@@ -27,23 +27,32 @@ def get_listings_from_search_results(html_file):
     """
     file = open(html_file, 'r')
     soup = BeautifulSoup(file, 'html.parser')
+    file.close()
     div_tags = soup.find_all('div', class_ = 't1jojoys')
     titles = []
     count = 0
     while count < len(div_tags):
         titles.append(div_tags[count].text.strip())
         count += 1
-    print(titles)
 
     id_list = []
     for i in div_tags:
         ids = i.get('id', None)
         new = ids.split('_')
         id_list.append(new[1])
-    print(id_list)
 
-    price_tags = soup.find_all('span', class_ = 't1jojoys')
+    price_tags = soup.find_all('span', class_ = "_tyxjp1")
+    price_list = []
+    for price in price_tags:
+        price_list.append(int(price.text.strip("$")))
 
+    tuple = (titles, price, id_list)
+    new_list = []
+    for i in range(len(titles)):
+        new_list.append(titles[i], price_list[i], id_list[i])
+    return new_list
+
+    get_listings_from_search_results("html_files/mission_district_search_results.html")
 
 def get_listing_information(listing_id):
     """
@@ -69,7 +78,41 @@ def get_listing_information(listing_id):
         number of bedrooms
     )
     """
-    pass
+    files = "html_files/listing_" + listing_id + ".html"
+    f_hand = open(files, "r")
+    files_hand = f_hand.read()
+    soup = BeautifulSoup(files_hand, 'html.parser')
+    f_hand.close()
+
+    policynumber = soup.find('li', class_ = "f19phm7j dir dir-ltr").span.text
+    policynumber = policynumber.strip("Policy number: ")
+    strlistp = ['Pending', 'pending', 'Pending Application', 'City registration']
+    strliste = ['License not needed per OSTR', 'Exempt', 'exempt']
+    if policynumber in strlistp:
+        policynumber = "Pending"
+    elif policynumber in strliste:
+        policynumber = "Exempt"
+    else:
+        policynumber = policynumber
+
+    placetype = soup.find_all('h2', class_ = '_14i3z6h')
+    strlista = ['Private Room', 'Shared Room']
+    strlistb = ['Private', 'Shared']
+    if placetype in strlista:
+        placetype = 'Private'
+    if placetype in strlistb:
+        placetype = 'Shared'
+    else:
+        placetype = 'Entire Room'
+    
+    bedroomnum = soup.find_all('li', class_ = "l7n4lsf dir dir-ltr")[1].find_all('span')[2].text
+    bedroomnum = bedroomnum.split(" ")[0]
+    if "studio" in bedroomnum.lower():
+        bedroomnum = 1
+
+    tuple = (policynumber, placetype, int(bedroomnum))
+    return tuple
+
 
 
 def get_detailed_listing_database(html_file):
