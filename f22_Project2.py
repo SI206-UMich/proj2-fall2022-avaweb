@@ -129,7 +129,12 @@ def get_detailed_listing_database(html_file):
         ...
     ]
     """
-    pass
+    first = get_listings_from_search_results(html_file)
+    list = []
+    for f in first:
+        second = get_listing_information(f[2])
+        list.append(f + second)
+    return list
 
 
 def write_csv(data, filename):
@@ -154,7 +159,14 @@ def write_csv(data, filename):
 
     This function should not return anything.
     """
-    pass
+    data_name = sorted(data, key = lambda x:x[1])
+    f = open(filename, "w")
+    csv1 = csv.writer(f)
+    header = ["Listing Title", "Cost", "Listing ID", "Policy Number", "Place Type", "Number of Bedrooms"]
+    csv1.writerow(header)
+    for data1 in data_name:
+        csv1.writerow(data1)
+    f.close()
 
 
 def check_policy_numbers(data):
@@ -176,8 +188,14 @@ def check_policy_numbers(data):
     ]
 
     """
-    pass
-
+    regex1 = "r(20\d{2}-00\d{4}STR)|(STR-000\d{4})|(Pending)|(Exempt)"
+    invalid = {}
+    for row in data:
+        policynumber1 = row[3]
+        if re.match(regex1, policynumber1) == False:
+            listing_id = row[2]
+            invalid.append(listing_id)
+    return invalid
 
 def extra_credit(listing_id):
     """
