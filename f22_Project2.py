@@ -95,11 +95,10 @@ def get_listing_information(listing_id):
         policynumber = policynumber
 
 
-    # placetype = soup.find_all('div', class_ = '_1d784e5')[2].get_text()
-    placetype = soup.find('h2', class_ = '_14i3z6h').text
-    if "private" in placetype.lower():
+    placetype = soup.find('h2', class_ = '_14i3z6h').text.lower()
+    if "private" in placetype:
         placetype = 'Private Room'
-    if "shared" in placetype.lower():
+    elif "shared" in placetype:
         placetype = 'Shared Room'
     else:
         placetype = 'Entire Room'
@@ -272,7 +271,7 @@ class TestCases(unittest.TestCase):
         self.assertEqual(listing_informations[-1][1], "Private Room")
 
         # check that the third listing has one bedroom
-        self.assertEqual(listing_informations[2][2], "1")
+        self.assertEqual(listing_informations[2][2], 1)
         
 
         
