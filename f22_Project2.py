@@ -1,3 +1,6 @@
+# Ava Webster
+# worked with: Remi Goldfarb
+
 from xml.sax import parseString
 from bs4 import BeautifulSoup
 import re
