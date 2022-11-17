@@ -191,7 +191,7 @@ def check_policy_numbers(data):
     invalid = []
     for row in data:
         policynumber1 = row[3]
-        if policynumber1 == "Pending" or policynumber1 == "Exempt":
+        if policynumber1.lower() == "pending" or policynumber1.lower() == "exempt":
             continue
         if re.search(regex1, policynumber1) or re.search(regex2, policynumber1):
             continue
@@ -229,7 +229,7 @@ def extra_credit(listing_id):
         reviews[year] = reviews.get(year, 0) + 1
         if reviews[year] > 90:
             return False
-    return True 
+    return True
 
 
 class TestCases(unittest.TestCase):
